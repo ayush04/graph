@@ -17,6 +17,7 @@ function Graph(vertex) {
 	_this.getDegree = getDegree;
 	_this.maxDegree = maxDegree;
 	_this.averageDegree = averageDegree;
+	_this.removeEdge = removeEdge;
 
 	/* Returns current graph */
 	function getGraph() {
@@ -53,7 +54,7 @@ function Graph(vertex) {
 		return edges/2;
 	}
 
-	/* Adds a edge in the graph */
+	/* Adds an edge in the graph */
 	function addEdge(fromVertex, toVertex) {
 		if(!_this.graph[fromVertex] || !_this.graph[toVertex]) {
 			console.log('One of the vertices, ' + fromVertex + ' or ' + toVertex + ' does not exist in graph. Please add that vertex first using addVertex method.');
@@ -61,6 +62,17 @@ function Graph(vertex) {
 		else {
 			_this.graph[fromVertex][toVertex] = '';
 			_this.graph[toVertex][fromVertex] = '';
+		}
+	}
+
+	/* Removes an edge from the graph */
+	function removeEdge(fromVertex, toVertex) {
+		if(!_this.graph[fromVertex] || !_this.graph[toVertex]) {
+			console.log('One of the vertices, ' + fromVertex + ' or ' + toVertex + ' does not exist in graph. Please add that vertex first using addVertex method.');
+		}
+		else {
+			delete _this.graph[fromVertex][toVertex];
+			delete _this.graph[toVertex][fromVertex];
 		}
 	}
 
