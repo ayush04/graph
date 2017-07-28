@@ -27,7 +27,7 @@ function Graph(vertex) {
 		return _this.graph;
 	}
 
-	/* Add a vertex to graph */
+	/* Adds vertex to graph */
 	function addVertex(vertex, connectedVerticesArr) {
 		_this.graph[vertex] = {};
 		if(connectedVerticesArr) {
