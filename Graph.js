@@ -1,7 +1,7 @@
 /**
  * JS implementation of an undirected Graph.
  * TODOs: 1. Add weights for the edges. 
- *	  2. Add support for loops.
+ *		  2. Add support for loops.
  */
 function Graph(vertex) {
 	var graph = {};
@@ -18,9 +18,9 @@ function Graph(vertex) {
 	_this.maxDegree = maxDegree;
 	_this.averageDegree = averageDegree;
 	_this.removeEdge = removeEdge;
-	_this.isEdge = isEdge;
+	_this.areConnected = areConnected;
 	_this.depthFirstSearch = depthFirstSearch;
-
+	_this.pathTo = pathTo;
 
 	/* Returns current graph */
 	function getGraph() {
@@ -109,7 +109,7 @@ function Graph(vertex) {
 	}
 
 	/* Function to check if there is an edge between 2 vertices */
-	function isEdge(fromVertex, toVertex) {
+	function areConnected(fromVertex, toVertex) {
 		var isPresent = false;
 		var adjacent = _this.adjacentVertices(fromVertex);
 		Object.keys(adjacent).forEach(function(vertex) {
@@ -128,15 +128,40 @@ function Graph(vertex) {
 		return _dfs(vertex, _isVisited, order);
 	}
 
-	function _dfs(vertex, _isVisited, order) {
+	function _dfs(vertex, _isVisited, order, _edgeTo) {
 		_isVisited[vertex] = true;
-		order.push(vertex);
+		if(order) {
+			order.push(vertex);
+		}
 		var adjacentNodes = _this.adjacentVertices(vertex);
 		Object.keys(adjacentNodes).forEach(function(adjVertex) {
 			if(!_isVisited[adjacentNodes[adjVertex]] === true) {
-				_dfs(adjacentNodes[adjVertex], _isVisited, order);
+				if(_edgeTo) {
+					_edgeTo[adjacentNodes[adjVertex]] = vertex;
+				}
+				_dfs(adjacentNodes[adjVertex], _isVisited, order, _edgeTo);
 			}
 		});
-		return order;
+		return _edgeTo ? _edgeTo : order;
+	}
+
+	/* Returns the path between 2 vertices in the graph. If path does not exists, then returns undefined.
+	 * Uses DFS to find the path
+	 */
+	function pathTo(fromVertex, toVertex) {
+		var _edgeTo = {};
+		var _isVisited = {};
+		var path = [];
+		_edgeTo = _dfs(fromVertex, _isVisited, undefined, _edgeTo);
+		if(!_edgeTo[toVertex]) {
+			return;
+		}
+		while(_edgeTo[toVertex] !== fromVertex) {
+			path.push(toVertex);
+			toVertex = _edgeTo[toVertex];
+		}
+		path.push(toVertex);
+		path.push(fromVertex);
+		return path.reverse();
 	}
 }
