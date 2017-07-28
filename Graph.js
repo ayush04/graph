@@ -1,7 +1,7 @@
 /**
  * JS implementation of an undirected Graph.
  * TODOs: 1. Add weights for the edges. 
- *		  2. Add support for loops.
+ *	  2. Add support for loops.
  */
 function Graph(vertex) {
 	var graph = {};
@@ -18,6 +18,9 @@ function Graph(vertex) {
 	_this.maxDegree = maxDegree;
 	_this.averageDegree = averageDegree;
 	_this.removeEdge = removeEdge;
+	_this.isEdge = isEdge;
+	_this.depthFirstSearch = depthFirstSearch;
+
 
 	/* Returns current graph */
 	function getGraph() {
@@ -103,5 +106,37 @@ function Graph(vertex) {
 	/* Returns average degree of the graph */
 	function averageDegree() {
 		return _this.numberOfEdges() / _this.numberOfVertices();
+	}
+
+	/* Function to check if there is an edge between 2 vertices */
+	function isEdge(fromVertex, toVertex) {
+		var isPresent = false;
+		var adjacent = _this.adjacentVertices(fromVertex);
+		Object.keys(adjacent).forEach(function(vertex) {
+			if(Number(adjacent[vertex]) === toVertex) {
+				isPresent = true;
+			}
+		});
+
+		return isPresent;
+	}
+
+	/* Implementation of depth first search. Returns the order in which elements are traversed */
+	function depthFirstSearch(vertex) {
+		var _isVisited = {};
+		var order = [];
+		return _dfs(vertex, _isVisited, order);
+	}
+
+	function _dfs(vertex, _isVisited, order) {
+		_isVisited[vertex] = true;
+		order.push(vertex);
+		var adjacentNodes = _this.adjacentVertices(vertex);
+		Object.keys(adjacentNodes).forEach(function(adjVertex) {
+			if(!_isVisited[adjacentNodes[adjVertex]] === true) {
+				_dfs(adjacentNodes[adjVertex], _isVisited, order);
+			}
+		});
+		return order;
 	}
 }
