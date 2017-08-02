@@ -1,7 +1,7 @@
 /**
  * JS implementation of an undirected Graph.
  * TODOs: 1. Add weights for the edges. 
- *		  2. Add support for loops.
+ *  	  2. Add support for loops.
  */
 function Graph(vertex) {
 	var graph = {};
@@ -20,6 +20,7 @@ function Graph(vertex) {
 	_this.removeEdge = removeEdge;
 	_this.areConnected = areConnected;
 	_this.depthFirstSearch = depthFirstSearch;
+	_this.breadthFirstSearch = breadthFirstSearch;
 	_this.pathTo = pathTo;
 
 	/* Returns current graph */
@@ -27,7 +28,7 @@ function Graph(vertex) {
 		return _this.graph;
 	}
 
-	/* Adds vertex to graph */
+	/* Add a vertex to graph */
 	function addVertex(vertex, connectedVerticesArr) {
 		_this.graph[vertex] = {};
 		if(connectedVerticesArr) {
@@ -146,13 +147,19 @@ function Graph(vertex) {
 	}
 
 	/* Returns the path between 2 vertices in the graph. If path does not exists, then returns undefined.
-	 * Uses DFS to find the path
+	 * Uses DFS or BFS to find the path depending on isDfs param.
 	 */
-	function pathTo(fromVertex, toVertex) {
+	function pathTo(fromVertex, toVertex, isDfs) {
 		var _edgeTo = {};
 		var _isVisited = {};
 		var path = [];
-		_edgeTo = _dfs(fromVertex, _isVisited, undefined, _edgeTo);
+		if(isDfs) {
+			_edgeTo = _dfs(fromVertex, _isVisited, undefined, _edgeTo);
+		}
+		else {
+			_edgeTo = _bfs(fromVertex, _isVisited, undefined, _edgeTo);
+		}
+
 		if(!_edgeTo[toVertex]) {
 			return;
 		}
@@ -163,5 +170,39 @@ function Graph(vertex) {
 		path.push(toVertex);
 		path.push(fromVertex);
 		return path.reverse();
+	}
+
+	/* Implementation of breadth first search */
+	function breadthFirstSearch(vertex) {
+		var _isVisited = {};
+		var order = [];
+		return _bfs(vertex, _isVisited, order);
+	}
+
+	function _bfs(vertex, _isVisited, order, _edgeTo) {
+		_isVisited[vertex] = true;
+		if(order) {
+			order.push(vertex);
+		}
+		var queue = [];
+		queue.push(vertex);
+		while(queue.length > 0) {
+			var element = queue.pop();
+			var adjacentNodes = _this.adjacentVertices(element);
+			Object.keys(adjacentNodes).forEach(function(adjVertex) {
+				if(!_isVisited[adjacentNodes[adjVertex]]) {
+					if(_edgeTo) {
+						_edgeTo[adjacentNodes[adjVertex]] = element;
+					}
+					_isVisited[adjacentNodes[adjVertex]] = true;
+					queue.push(adjacentNodes[adjVertex]);
+					if(order) {
+						order.push(adjacentNodes[adjVertex]);
+					}
+				}
+			});
+		}
+
+		return _edgeTo ? _edgeTo : order;
 	}
 }
