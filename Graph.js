@@ -1,7 +1,7 @@
 /**
  * JS implementation of an undirected Graph.
  * TODOs: 1. Add weights for the edges. 
- *  	  2. Add support for loops.
+ *	  2. Add support for loops.
  */
 function Graph(vertex) {
 	var graph = {};
@@ -187,7 +187,7 @@ function Graph(vertex) {
 		var queue = [];
 		queue.push(vertex);
 		while(queue.length > 0) {
-			var element = queue.pop();
+			var element = queue.splice(0, 1)[0];
 			var adjacentNodes = _this.adjacentVertices(element);
 			Object.keys(adjacentNodes).forEach(function(adjVertex) {
 				if(!_isVisited[adjacentNodes[adjVertex]]) {
