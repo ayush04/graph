@@ -1,5 +1,5 @@
 # graph
-JS implementation of an undirected Graph
+JS implementation of a Graph
 
 TODOs: 
 1. Add weights for the edges. 
