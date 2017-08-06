@@ -1,13 +1,14 @@
 /**
  * JS implementation of an undirected Graph.
- * TODOs: 1. Add weights for the edges. 
- *	  2. Add support for loops.
+ * TODOs:	1. Add weights for the edges. 
+ *		2. Add support for loops.
  */
-function Graph(vertex) {
+function Graph(vertex, isDirected) {
 	var graph = {};
 	_this = this;
 	_this.graph = graph;
 	_this.graph[vertex] = {};
+	_this.directed = isDirected ? true : false;
 	_this.getGraph = getGraph;
 	_this.addVertex = addVertex;
 	_this.numberOfVertices = numberOfVertices;
@@ -36,8 +37,10 @@ function Graph(vertex) {
 				if(!_this.graph[newVertex]) {
 					_this.graph[newVertex] = {};
 				}
-				_this.graph[newVertex][vertex] = '';
 				_this.graph[vertex][newVertex] = '';
+				if(!_this.directed) {
+					_this.graph[newVertex][vertex] = '';
+				}
 			});
 		}
 	}
@@ -114,7 +117,7 @@ function Graph(vertex) {
 		var isPresent = false;
 		var adjacent = _this.adjacentVertices(fromVertex);
 		Object.keys(adjacent).forEach(function(vertex) {
-			if(Number(adjacent[vertex]) === toVertex) {
+			if(adjacent[vertex] === toVertex) {
 				isPresent = true;
 			}
 		});
