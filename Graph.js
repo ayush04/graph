@@ -1,5 +1,5 @@
 /**
- * JS implementation of a Graph.
+ * JS implementation of an undirected Graph.
  * TODOs:	1. Add weights for the edges. 
  *		2. Add support for loops.
  */
@@ -23,6 +23,7 @@ function Graph(vertex, isDirected) {
 	_this.depthFirstSearch = depthFirstSearch;
 	_this.breadthFirstSearch = breadthFirstSearch;
 	_this.pathTo = pathTo;
+	_this.reverse = reverse;
 
 	/* Returns current graph */
 	function getGraph() {
@@ -207,5 +208,24 @@ function Graph(vertex, isDirected) {
 		}
 
 		return _edgeTo ? _edgeTo : order;
+	}
+
+	/* Function to reverse the graph. Will be useful only for directed graphs */
+	function reverse() {
+		/* If the graph is not directed, return the original graph */
+		if(!_this.directed) {
+			return _this.graph;
+		}
+		var reverseGraph = {};
+		Object.keys(_this.graph).forEach(function(key) {
+			_this.adjacentVertices(key).forEach(function(vertex) {
+				if(reverseGraph[vertex] === undefined) {
+					reverseGraph[vertex] = {};
+				}
+				reverseGraph[vertex][key] = '';
+			});
+		});
+
+		return reverseGraph;
 	}
 }
