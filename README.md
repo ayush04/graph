@@ -1,5 +1,5 @@
 # graph
-JS implementation of a Graph
+JS implementation of Graph DS
 
 TODOs: 
 1. Add weights for the edges. 
